@@ -126,6 +126,9 @@ header{position:fixed;inset:0 0 auto 0;z-index:50;backdrop-filter:blur(12px);bac
 .about ul{list-style:none}
 .about li{color:var(--muted);font-size:14.5px;font-weight:300;padding:13px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}
 .about li b{color:var(--ink);font-weight:500;min-width:120px}
+.wa-btn{display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:16px 36px;border:1px solid var(--accent);color:var(--accent-soft);font-size:14px;letter-spacing:.14em;text-transform:uppercase;transition:all .3s ease;background:transparent;min-height:48px}
+.wa-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6}
+.wa-btn:hover{background:var(--accent);color:#141414}
 footer{padding:40px 24px;text-align:center;color:var(--muted);font-size:12px;letter-spacing:.14em;border-top:1px solid var(--line)}
 footer span{color:var(--accent)}
 
@@ -345,7 +348,11 @@ footer span{color:var(--accent)}
 <section class="section" id="contact">
   <div class="section-head"><h2>Contact</h2><div class="sub">CONTACT</div></div>
   <p style="color:var(--muted);font-size:15px;font-weight:300;max-width:640px">Open to long-term rendering collaboration — batch delivery and multiple revision rounds supported. Reach out for quotes and scheduling; we reply promptly.</p>
-  <p style="margin-top:18px;color:var(--ink);font-size:15px">WeChat: <span style="color:var(--accent-soft)">y98_12</span>&nbsp; | &nbsp;WhatsApp: <span style="color:var(--accent-soft)">+86 176 2382 3820</span>&nbsp; | &nbsp;Email: <span style="color:var(--accent-soft)">1039465345y@gmail.com</span></p>
+  <a class="wa-btn" href="https://wa.me/8617623823820?text=Hi%2C%20I%27m%20interested%20in%20your%203D%20rendering%20services" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M9 8.2c-.3 0-.6.1-.8.5-.3.5-.7 1.4 0 2.7.8 1.6 2.4 3.1 4.1 3.8 1.3.5 2.3.3 2.7-.2.2-.4.1-.7 0-.9l-.8-.5c-.3-.1-.6-.2-.8 0l-.5.4c-.2.2-.4.1-.6 0-.7-.3-2-1.6-2.3-2.3-.1-.3 0-.5.2-.7l.4-.5c.1-.2.1-.5 0-.8l-.5-.9c-.2-.3-.5-.4-.8-.5z"/></svg>
+    Chat on WhatsApp
+  </a>
+  <p style="margin-top:30px;color:var(--ink);font-size:15px">WeChat: <span style="color:var(--accent-soft)">y98_12</span>&nbsp; | &nbsp;WhatsApp: <a href="https://wa.me/8617623823820" target="_blank" rel="noopener" style="color:var(--accent-soft);text-decoration:underline">+86 176 2382 3820</a>&nbsp; | &nbsp;Email: <a href="mailto:1039465345y@gmail.com" style="color:var(--accent-soft);text-decoration:underline">1039465345y@gmail.com</a></p>
 </section>
 
 <!-- ===== Footer ===== -->
