@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D Visualization Portfolio</title>
+<meta name="description" content="Portfolio of interior & architectural 3D renders — premium spatial visualization projects.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141517'/%3E%3Cpath d='M8 22V12l6 4 4-6 6 8v4' stroke='%23b9a06b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap">
+<style>
+:root{
+  --bg:#101114; --bg2:#16171a; --panel:#1b1d21;
+  --ink:#ece7df; --muted:#9aa0a8; --line:#2a2d33;
+  --accent:#b9a06b; --accent-soft:#cdb98a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Sans SC',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.6;overflow-x:hidden}
+h1,h2,h3{font-family:'Noto Serif SC',Georgia,'Songti SC',serif}
+img{display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+::selection{background:var(--accent);color:#141414}
+
+/* 顶部导航 */
+header{position:fixed;inset:0 0 auto 0;z-index:50;backdrop-filter:blur(10px);background:rgba(16,17,20,.82);border-bottom:1px solid var(--line)}
+.nav{max-width:1240px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-weight:600;letter-spacing:.06em;font-size:17px}
+.brand b{color:var(--accent);font-weight:700}
+.nav-links{display:none;gap:26px;font-size:14px;color:var(--muted)}
+.nav-links a:hover{color:var(--ink)}
+.menu-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.menu-btn svg{width:22px;height:22px}
+
+/* Hero */
+.hero{position:relative;padding:96px 20px 0;min-height:88vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:-1}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,17,20,.35),rgba(16,17,20,.92) 78%)}
+.hero-inner{max-width:1240px;margin:0 auto;padding-bottom:56px;width:100%}
+.eyebrow{color:var(--accent-soft);letter-spacing:.35em;font-size:12px;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,6vw,56px);font-weight:700;letter-spacing:.02em;line-height:1.2}
+.hero p{margin-top:16px;max-width:520px;color:#d5d2cc;font-size:15px;font-weight:300}
+.hero-meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:13px}
+.hero-meta span b{color:var(--ink);font-weight:500;margin-left:6px}
+.scroll-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);color:rgba(236,231,223,.55);font-size:12px;letter-spacing:.2em}
+
+/* 作品集 */
+.section{max-width:1240px;margin:0 auto;padding:72px 20px}
+.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:34px}
+.section-head h2{font-size:clamp(22px,3.4vw,30px);font-weight:600}
+.section-head .sub{color:var(--muted);font-size:13px;letter-spacing:.1em}
+.grid{display:grid;grid-template-columns:1fr;gap:22px}
+@media(min-width:768px){.grid{grid-template-columns:repeat(4,1fr);gap:18px}}
+.card{position:relative;border:1px solid var(--line);background:var(--panel);overflow:hidden;border-radius:2px;transition:transform .25s ease,border-color .25s ease;text-align:left}
+.card:hover{transform:translateY(-4px);border-color:#3a3e46}
+.card .thumb{position:relative;aspect-ratio:3/4;overflow:hidden;background:#141517}
+.card .thumb img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .6s ease}
+.card:hover .thumb img{transform:scale(1.05)}
+.card .idx{position:absolute;top:12px;left:12px;z-index:2;font-family:'Noto Serif SC',serif;font-size:12px;color:#141414;background:var(--accent);padding:3px 9px;letter-spacing:.05em}
+.card .body{padding:16px 16px 18px}
+.card h3{font-size:17px;font-weight:600}
+.card .meta{color:var(--muted);font-size:13px;margin-top:6px}
+.card .count{margin-top:10px;display:inline-flex;align-items:center;gap:6px;color:var(--accent-soft);font-size:13px}
+.card .count svg{width:15px;height:15px}
+
+/* 项目详情 */
+#detail{display:none}
+#detail.on{display:block}
+.detail-head{max-width:1240px;margin:0 auto;padding:104px 20px 8px}
+.detail-head .back{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;padding:10px 0;min-height:44px}
+.detail-head .back svg{width:16px;height:16px}
+.detail-head .back:hover{color:var(--accent-soft)}
+.detail-title{margin-top:8px;font-size:clamp(24px,4vw,36px);font-weight:600}
+.detail-sub{color:var(--muted);font-size:14px;margin-top:8px}
+.gallery{max-width:1240px;margin:0 auto;padding:34px 20px 80px;display:none;grid-template-columns:1fr;gap:18px}
+.gallery.on{display:grid}
+@media(min-width:768px){.gallery{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.gallery{grid-template-columns:repeat(3,1fr)}}
+.gallery figure{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--panel);border:1px solid var(--line);cursor:zoom-in;border-radius:2px}
+.gallery img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s ease}
+.gallery figure:hover img{transform:scale(1.04)}
+.gallery figure:hover{border-color:#3a3e46}
+.gallery .gidx{position:absolute;bottom:8px;right:10px;z-index:2;font-size:11px;color:#141414;background:rgba(217,203,138,.92);padding:2px 7px;font-family:'Noto Serif SC',serif}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(8,9,11,.96);padding:20px}
+.lightbox.on{display:flex}
+.lightbox img{max-width:94vw;max-height:86vh;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lb-close{position:absolute;top:16px;right:18px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;opacity:.7}
+.lb-nav:hover{opacity:1}
+.lb-prev{left:12px}.lb-next{right:12px}
+.lb-cap{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:rgba(255,255,255,.75);font-size:13px;letter-spacing:.05em}
+
+/* 关于 / 联系 */
+.about{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.about .section{display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between}
+.about .col{flex:1;min-width:260px}
+.about h3{font-size:20px;font-weight:600;margin-bottom:14px;color:var(--accent-soft)}
+.about p{color:var(--muted);font-size:14px;font-weight:300;max-width:480px}
+.about .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.about .tags span{font-size:13px;color:var(--ink);border:1px solid var(--line);padding:5px 12px;border-radius:20px}
+.about ul{list-style:none}
+.about li{color:var(--muted);font-size:14px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.about li b{color:var(--ink);font-weight:500}
+footer{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px}
+footer span{color:var(--accent)}
+
+/* 移动抽屉 */
+.drawer{position:fixed;inset:0;z-index:60;background:rgba(8,9,11,.97);display:none;flex-direction:column;padding:80px 32px;gap:6px}
+.drawer.on{display:flex}
+.drawer a{font-family:'Noto Serif SC',serif;font-size:26px;padding:14px 0;border-bottom:1px solid var(--line)}
+.drawer a:hover{color:var(--accent-soft)}
+.drawer-close{position:absolute;top:16px;right:18px;width:48px;height:48px;font-size:30px;color:#fff}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<header>
+  <div class="nav">
+    <div class="brand">Render<b>·</b>Studio</div>
+    <nav class="nav-links">
+      <a href="#works">Works</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="menu-btn" onclick="openDrawer()" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- 移动抽屉 -->
+<div class="drawer" id="drawer">
+  <button class="drawer-close" onclick="closeDrawer()" aria-label="Close">&times;</button>
+  <a href="#works" onclick="closeDrawer()">Works</a>
+  <a href="#about" onclick="closeDrawer()">About</a>
+  <a href="#contact" onclick="closeDrawer()">Contact</a>
+</div>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-bg"><img src="assets/proj-01/img-01.jpg" alt=""></div>
+  <div class="hero-inner">
+    <div class="eyebrow">3D Visualization Portfolio</div>
+    <h1>Spatial Visualization<br>3D Render Portfolio</h1>
+    <p>High-end interior and architectural visualization — spanning zen spa retreats, luxury dining, open kitchens, living rooms and study areas. We bring design intent to life through realistic materials, light and refined staging.</p>
+    <div class="hero-meta">
+      <span>Projects<b>7</b></span>
+      <span>Renders<b>69</b></span>
+      <span>Type<b>Interior · Architecture</b></span>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to explore</div>
+</section>
+
+<!-- ===== 作品网格（封面） ===== -->
+<section class="section" id="works">
+  <div class="section-head">
+    <h2>Portfolio</h2>
+    <div class="sub">SELECTED PROJECTS</div>
+  </div>
+  <div class="grid">
+    <button class="card" onclick="openProject('proj-01')">
+      <div class="thumb"><span class="idx">01</span><img src="assets/proj-01/img-01.jpg" alt="Zen Spa Retreat" loading="lazy"></div>
+      <div class="body"><h3>Zen Spa Retreat</h3><div class="meta">Indoor Spa / Sheer Partition / Timber Beams</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>16  images</div></div>
+    </button>
+    <button class="card" onclick="openProject('proj-02')">
+      <div class="thumb"><span class="idx">02</span><img src="assets/proj-02/img-01.jpg" alt="Luxury Dining Space" loading="lazy"></div>
+      <div class="body"><h3>Luxury Dining Space</h3><div class="meta">Marble Table / Timber Panels / Mountain View</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>12  images</div></div>
+    </button>
+    <button class="card" onclick="openProject('proj-03')">
+      <div class="thumb"><span class="idx">03</span><img src="assets/proj-03/img-01.jpg" alt="Minimalist Open Kitchen" loading="lazy"></div>
+      <div class="body"><h3>Minimalist Open Kitchen</h3><div class="meta">Oak & Cream / Metal Pendants / Open-Plan</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>11  images</div></div>
+    </button>
+    <button class="card" onclick="openProject('proj-04')">
+      <div class="thumb"><span class="idx">04</span><img src="assets/proj-04/img-01.jpg" alt="Vintage-Style Living Room" loading="lazy"></div>
+      <div class="body"><h3>Vintage-Style Living Room</h3><div class="meta">Fabric Sofa / Geometric Rug / Shelving</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>8  images</div></div>
+    </button>
+    <button class="card" onclick="openProject('proj-05')">
+      <div class="thumb"><span class="idx">05</span><img src="assets/proj-05/img-01.jpg" alt="Minimalist Lounge & Bookshelf" loading="lazy"></div>
+      <div class="body"><h3>Minimalist Lounge & Bookshelf</h3><div class="meta">Dark Shelving / Reading Nook / Lounge Chair</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>10  images</div></div>
+    </button>
+    <button class="card" onclick="openProject('proj-06')">
+      <div class="thumb"><span class="idx">06</span><img src="assets/proj-06/img-01.jpg" alt="Luxury Dining Hall" loading="lazy"></div>
+      <div class="body"><h3>Luxury Dining Hall</h3><div class="meta">Dark Table / Brass & Candles / Wine Shelf</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>6  images</div></div>
+    </button>
+    <button class="card" onclick="openProject('proj-07')">
+      <div class="thumb"><span class="idx">07</span><img src="assets/proj-07/img-01.jpg" alt="Open-Plan Living & Dining" loading="lazy"></div>
+      <div class="body"><h3>Open-Plan Living & Dining</h3><div class="meta">Open Layout / Stone Counter / Integrated</div><div class="count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>6  images</div></div>
+    </button>
+  </div>
+</section>
+
+<!-- ===== 项目详情（画廊） ===== -->
+<section id="detail">
+  <div class="detail-head">
+    <button class="back" onclick="showWorks()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 19l-7-7 7-7"/></svg>
+      Back to Portfolio
+    </button>
+    <h1 class="detail-title" id="dTitle"></h1>
+    <div class="detail-sub" id="dSub"></div>
+  </div>
+
+  <div class="gallery" id="gal-proj-01" data-title="Zen Spa Retreat" data-sub="Indoor Spa / Sheer Partition / Timber Beams">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-01/img-01.jpg" alt="Zen Spa Retreat 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-01/img-02.jpg" alt="Zen Spa Retreat 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-01/img-03.jpg" alt="Zen Spa Retreat 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-01/img-04.jpg" alt="Zen Spa Retreat 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-01/img-05.jpg" alt="Zen Spa Retreat 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-01/img-06.jpg" alt="Zen Spa Retreat 6" loading="lazy"></figure>
+    <figure onclick="lbOpen(6)"><span class="gidx">07</span><img src="assets/proj-01/img-07.jpg" alt="Zen Spa Retreat 7" loading="lazy"></figure>
+    <figure onclick="lbOpen(7)"><span class="gidx">08</span><img src="assets/proj-01/img-08.jpg" alt="Zen Spa Retreat 8" loading="lazy"></figure>
+    <figure onclick="lbOpen(8)"><span class="gidx">09</span><img src="assets/proj-01/img-09.jpg" alt="Zen Spa Retreat 9" loading="lazy"></figure>
+    <figure onclick="lbOpen(9)"><span class="gidx">10</span><img src="assets/proj-01/img-10.jpg" alt="Zen Spa Retreat 10" loading="lazy"></figure>
+    <figure onclick="lbOpen(10)"><span class="gidx">11</span><img src="assets/proj-01/img-11.jpg" alt="Zen Spa Retreat 11" loading="lazy"></figure>
+    <figure onclick="lbOpen(11)"><span class="gidx">12</span><img src="assets/proj-01/img-12.jpg" alt="Zen Spa Retreat 12" loading="lazy"></figure>
+    <figure onclick="lbOpen(12)"><span class="gidx">13</span><img src="assets/proj-01/img-13.jpg" alt="Zen Spa Retreat 13" loading="lazy"></figure>
+    <figure onclick="lbOpen(13)"><span class="gidx">14</span><img src="assets/proj-01/img-14.jpg" alt="Zen Spa Retreat 14" loading="lazy"></figure>
+    <figure onclick="lbOpen(14)"><span class="gidx">15</span><img src="assets/proj-01/img-15.jpg" alt="Zen Spa Retreat 15" loading="lazy"></figure>
+    <figure onclick="lbOpen(15)"><span class="gidx">16</span><img src="assets/proj-01/img-16.jpg" alt="Zen Spa Retreat 16" loading="lazy"></figure>
+  </div>
+  <div class="gallery" id="gal-proj-02" data-title="Luxury Dining Space" data-sub="Marble Table / Timber Panels / Mountain View">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-02/img-01.jpg" alt="Luxury Dining Space 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-02/img-02.jpg" alt="Luxury Dining Space 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-02/img-03.jpg" alt="Luxury Dining Space 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-02/img-04.jpg" alt="Luxury Dining Space 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-02/img-05.jpg" alt="Luxury Dining Space 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-02/img-06.jpg" alt="Luxury Dining Space 6" loading="lazy"></figure>
+    <figure onclick="lbOpen(6)"><span class="gidx">07</span><img src="assets/proj-02/img-07.jpg" alt="Luxury Dining Space 7" loading="lazy"></figure>
+    <figure onclick="lbOpen(7)"><span class="gidx">08</span><img src="assets/proj-02/img-08.jpg" alt="Luxury Dining Space 8" loading="lazy"></figure>
+    <figure onclick="lbOpen(8)"><span class="gidx">09</span><img src="assets/proj-02/img-09.jpg" alt="Luxury Dining Space 9" loading="lazy"></figure>
+    <figure onclick="lbOpen(9)"><span class="gidx">10</span><img src="assets/proj-02/img-10.jpg" alt="Luxury Dining Space 10" loading="lazy"></figure>
+    <figure onclick="lbOpen(10)"><span class="gidx">11</span><img src="assets/proj-02/img-11.jpg" alt="Luxury Dining Space 11" loading="lazy"></figure>
+    <figure onclick="lbOpen(11)"><span class="gidx">12</span><img src="assets/proj-02/img-12.jpg" alt="Luxury Dining Space 12" loading="lazy"></figure>
+  </div>
+  <div class="gallery" id="gal-proj-03" data-title="Minimalist Open Kitchen" data-sub="Oak & Cream / Metal Pendants / Open-Plan">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-03/img-01.jpg" alt="Minimalist Open Kitchen 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-03/img-02.jpg" alt="Minimalist Open Kitchen 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-03/img-03.jpg" alt="Minimalist Open Kitchen 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-03/img-04.jpg" alt="Minimalist Open Kitchen 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-03/img-05.jpg" alt="Minimalist Open Kitchen 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-03/img-06.jpg" alt="Minimalist Open Kitchen 6" loading="lazy"></figure>
+    <figure onclick="lbOpen(6)"><span class="gidx">07</span><img src="assets/proj-03/img-07.jpg" alt="Minimalist Open Kitchen 7" loading="lazy"></figure>
+    <figure onclick="lbOpen(7)"><span class="gidx">08</span><img src="assets/proj-03/img-08.jpg" alt="Minimalist Open Kitchen 8" loading="lazy"></figure>
+    <figure onclick="lbOpen(8)"><span class="gidx">09</span><img src="assets/proj-03/img-09.jpg" alt="Minimalist Open Kitchen 9" loading="lazy"></figure>
+    <figure onclick="lbOpen(9)"><span class="gidx">10</span><img src="assets/proj-03/img-10.jpg" alt="Minimalist Open Kitchen 10" loading="lazy"></figure>
+    <figure onclick="lbOpen(10)"><span class="gidx">11</span><img src="assets/proj-03/img-11.jpg" alt="Minimalist Open Kitchen 11" loading="lazy"></figure>
+  </div>
+  <div class="gallery" id="gal-proj-04" data-title="Vintage-Style Living Room" data-sub="Fabric Sofa / Geometric Rug / Shelving">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-04/img-01.jpg" alt="Vintage-Style Living Room 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-04/img-02.jpg" alt="Vintage-Style Living Room 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-04/img-03.jpg" alt="Vintage-Style Living Room 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-04/img-04.jpg" alt="Vintage-Style Living Room 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-04/img-05.jpg" alt="Vintage-Style Living Room 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-04/img-06.jpg" alt="Vintage-Style Living Room 6" loading="lazy"></figure>
+    <figure onclick="lbOpen(6)"><span class="gidx">07</span><img src="assets/proj-04/img-07.jpg" alt="Vintage-Style Living Room 7" loading="lazy"></figure>
+    <figure onclick="lbOpen(7)"><span class="gidx">08</span><img src="assets/proj-04/img-08.jpg" alt="Vintage-Style Living Room 8" loading="lazy"></figure>
+  </div>
+  <div class="gallery" id="gal-proj-05" data-title="Minimalist Lounge & Bookshelf" data-sub="Dark Shelving / Reading Nook / Lounge Chair">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-05/img-01.jpg" alt="Minimalist Lounge & Bookshelf 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-05/img-02.jpg" alt="Minimalist Lounge & Bookshelf 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-05/img-03.jpg" alt="Minimalist Lounge & Bookshelf 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-05/img-04.jpg" alt="Minimalist Lounge & Bookshelf 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-05/img-05.jpg" alt="Minimalist Lounge & Bookshelf 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-05/img-06.jpg" alt="Minimalist Lounge & Bookshelf 6" loading="lazy"></figure>
+    <figure onclick="lbOpen(6)"><span class="gidx">07</span><img src="assets/proj-05/img-07.jpg" alt="Minimalist Lounge & Bookshelf 7" loading="lazy"></figure>
+    <figure onclick="lbOpen(7)"><span class="gidx">08</span><img src="assets/proj-05/img-08.jpg" alt="Minimalist Lounge & Bookshelf 8" loading="lazy"></figure>
+    <figure onclick="lbOpen(8)"><span class="gidx">09</span><img src="assets/proj-05/img-09.jpg" alt="Minimalist Lounge & Bookshelf 9" loading="lazy"></figure>
+    <figure onclick="lbOpen(9)"><span class="gidx">10</span><img src="assets/proj-05/img-10.jpg" alt="Minimalist Lounge & Bookshelf 10" loading="lazy"></figure>
+  </div>
+  <div class="gallery" id="gal-proj-06" data-title="Luxury Dining Hall" data-sub="Dark Table / Brass & Candles / Wine Shelf">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-06/img-01.jpg" alt="Luxury Dining Hall 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-06/img-02.jpg" alt="Luxury Dining Hall 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-06/img-03.jpg" alt="Luxury Dining Hall 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-06/img-04.jpg" alt="Luxury Dining Hall 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-06/img-05.jpg" alt="Luxury Dining Hall 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-06/img-06.jpg" alt="Luxury Dining Hall 6" loading="lazy"></figure>
+  </div>
+  <div class="gallery" id="gal-proj-07" data-title="Open-Plan Living & Dining" data-sub="Open Layout / Stone Counter / Integrated">
+    <!-- GAL-A-START -->
+    <figure onclick="lbOpen(0)"><span class="gidx">01</span><img src="assets/proj-07/img-01.jpg" alt="Open-Plan Living & Dining 1" loading="lazy"></figure>
+    <figure onclick="lbOpen(1)"><span class="gidx">02</span><img src="assets/proj-07/img-02.jpg" alt="Open-Plan Living & Dining 2" loading="lazy"></figure>
+    <figure onclick="lbOpen(2)"><span class="gidx">03</span><img src="assets/proj-07/img-03.jpg" alt="Open-Plan Living & Dining 3" loading="lazy"></figure>
+    <figure onclick="lbOpen(3)"><span class="gidx">04</span><img src="assets/proj-07/img-04.jpg" alt="Open-Plan Living & Dining 4" loading="lazy"></figure>
+    <figure onclick="lbOpen(4)"><span class="gidx">05</span><img src="assets/proj-07/img-05.jpg" alt="Open-Plan Living & Dining 5" loading="lazy"></figure>
+    <figure onclick="lbOpen(5)"><span class="gidx">06</span><img src="assets/proj-07/img-06.jpg" alt="Open-Plan Living & Dining 6" loading="lazy"></figure>
+  </div>
+</section>
+
+<!-- ===== 关于 ===== -->
+<section class="about" id="about">
+  <div class="section">
+    <div class="col">
+      <h3>About Us</h3>
+      <p>We are a rendering team specialized in spatial visualization — interior design, architectural exteriors and styling presentation. Known for realistic materials, natural light and refined staging, we deliver high-quality renders and animations for design and real-estate clients.</p>
+      <div class="tags">
+        <span>Interior Renders</span><span>Architectural Viz</span><span>Interior Styling</span><span>Render Animation</span>
+      </div>
+    </div>
+    <div class="col">
+      <h3>Services</h3>
+      <ul>
+        <li><b>Residential</b> · Living / Dining / Bedroom / Open-plan</li>
+        <li><b>Hospitality</b> · Spa / Zen Space / Lounge</li>
+        <li><b>Commercial</b> · Showcase / Office / Sales Gallery</li>
+        <li><b>Exterior</b> · Villa / Landscape / Pool &amp; Garden</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 联系 ===== -->
+<section class="section" id="contact">
+  <div class="section-head"><h2>Contact</h2><div class="sub">CONTACT</div></div>
+  <p style="color:var(--muted);font-size:15px;font-weight:300;max-width:640px">Open to long-term rendering collaboration — batch delivery and multiple revision rounds supported. Reach out for quotes and scheduling; we reply promptly.</p>
+  <p style="margin-top:18px;color:var(--ink);font-size:15px">WeChat: <span style="color:var(--accent-soft)">y98_12</span>&nbsp; | &nbsp;WhatsApp: <span style="color:var(--accent-soft)">+86 176 2382 3820</span>&nbsp; | &nbsp;Email: <span style="color:var(--accent-soft)">1039465345y@gmail.com</span></p>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>© <span>Render Studio</span> · 3D Visualization Portfolio</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="lbClose()" aria-label="Close">&times;</button>
+  <button class="lb-nav lb-prev" onclick="lbMove(-1)" aria-label="Previous">&#8249;</button>
+  <img id="lbImg" alt="放大查看">
+  <button class="lb-nav lb-next" onclick="lbMove(1)" aria-label="Next">&#8250;</button>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
+<script>
+const detail = document.getElementById('detail');
+const worksSec = document.getElementById('works');
+let curList = [], curIdx = 0;
+
+/* 打开项目：隐藏封面网格与其它画廊，显示目标画廊 */
+function openProject(id){
+  document.querySelectorAll('.gallery').forEach(g=>g.classList.remove('on'));
+  const g = document.getElementById('gal-'+id);
+  if(!g) return;
+  g.classList.add('on');
+  curList = Array.from(g.querySelectorAll('img')).map(img=>img.getAttribute('src'));
+  document.getElementById('dTitle').textContent = g.dataset.title;
+  document.getElementById('dSub').textContent = g.dataset.sub;
+  detail.classList.add('on');
+  worksSec.style.display = 'none';
+  window.scrollTo({top:0});
+}
+function showWorks(){
+  detail.classList.remove('on');
+  document.querySelectorAll('.gallery').forEach(g=>g.classList.remove('on'));
+  worksSec.style.display = '';
+  window.scrollTo({top:0});
+}
+
+/* Lightbox */
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
+function lbOpen(i){
+  curIdx = i; updateLb();
+  lb.classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function updateLb(){
+  lbImg.src = curList[curIdx];
+  lbCap.textContent = (curIdx+1) + ' / ' + curList.length;
+}
+function lbMove(d){
+  curIdx = (curIdx + d + curList.length) % curList.length;
+  updateLb();
+}
+function lbClose(){
+  lb.classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+/* 抽屉 */
+const drawer = document.getElementById('drawer');
+function openDrawer(){ drawer.classList.add('on'); }
+function closeDrawer(){ drawer.classList.remove('on'); }
+
+/* 键盘导航 */
+document.addEventListener('keydown', e=>{
+  if(lb.classList.contains('on')){
+    if(e.key==='Escape') lbClose();
+    if(e.key==='ArrowLeft') lbMove(-1);
+    if(e.key==='ArrowRight') lbMove(1);
+  }
+});
+</script>
+</body>
+</html>
