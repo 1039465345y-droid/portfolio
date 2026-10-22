@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>穹界视觉 3D 工作室 · 3D Visualization Portfolio</title>
 <meta name="description" content="Portfolio of interior & architectural 3D renders — premium spatial visualization projects.">
+<script>document.documentElement.classList.add('js');</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141517'/%3E%3Cpath d='M8 22V12l6 4 4-6 6 8v4' stroke='%23b9a06b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap">
 <style>
@@ -200,13 +201,14 @@ footer span{color:var(--accent)}
 .drawer-close{position:absolute;top:18px;right:20px;width:48px;height:48px;font-size:30px;color:#fff}
 
 /* ===== 滚动揭示 ===== */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .95s var(--ease),transform .95s var(--ease)}
-.reveal.on{opacity:1;transform:none}
+.reveal{opacity:1;transform:none}
+html.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .95s var(--ease),transform .95s var(--ease)}
+html.js .reveal.on{opacity:1;transform:none}
 
 /* ===== 减弱动效 ===== */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-  .reveal{opacity:1;transform:none}
+  .reveal,html.js .reveal{opacity:1;transform:none}
   .hero-bg .slide{animation:none}.hero-bg .slide:nth-child(1){opacity:1}
 }
 
@@ -608,12 +610,22 @@ function closeDrawer(){ drawer.classList.remove('on'); }
 
 /* 滚动揭示 */
 (function(){
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); }
-    });
-  }, {threshold:.1, rootMargin:'0px 0px -6% 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  var fired = false;
+  function showAll(){ els.forEach(function(el){ el.classList.add('on'); }); }
+  try{
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){ fired = true; e.target.classList.add('on'); io.unobserve(e.target); }
+      });
+    }, {threshold:.1, rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(el){ io.observe(el); });
+  }catch(err){ fired = true; showAll(); }
+  /* 兜底：IO 失灵（如部分内置浏览器）时，4 秒后或首次滚动强制全部显示 */
+  setTimeout(function(){ if(!fired){ fired = true; showAll(); } }, 4000);
+  window.addEventListener('scroll', function onSc(){
+    if(!fired){ fired = true; showAll(); window.removeEventListener('scroll', onSc); }
+  }, {passive:true});
 })();
 /* 导航滚动状态 */
 (function(){
